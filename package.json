@@ -9,6 +9,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.1036.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.1036.0",
+    "@aws-sdk/client-dynamodb": "^3.1036.0",
+    "@aws-sdk/lib-dynamodb": "^3.1036.0",
+    "aws-cdk-lib": "^2.250.0",
+    "aws-lambda": "^1.0.7",
+    "constructs": "^10.6.0",
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4"
