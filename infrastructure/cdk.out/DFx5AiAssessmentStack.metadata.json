@@ -1,0 +1,374 @@
+{
+  "/DFx5AiAssessmentStack/AssessmentsTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "AssessmentsTable6996196E"
+      }
+    }
+  ],
+  "/DFx5AiAssessmentStack/ResponsesTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "ResponsesTable53B822ED"
+      }
+    }
+  ],
+  "/DFx5AiAssessmentStack/SessionsTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "SessionsTable7C302024"
+      }
+    }
+  ],
+  "/DFx5AiAssessmentStack/ApiUrl": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiUrl"
+    }
+  ],
+  "/DFx5AiAssessmentStack/UserPoolId": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UserPoolId"
+    }
+  ],
+  "/DFx5AiAssessmentStack/UserPoolClientId": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UserPoolClientId"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentsTableName": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentsTableName"
+    }
+  ],
+  "/DFx5AiAssessmentStack/Region": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "Region"
+    }
+  ],
+  "/DFx5AiAssessmentStack/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    }
+  ],
+  "/DFx5AiAssessmentStack/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentsTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentsTable6996196E"
+    }
+  ],
+  "/DFx5AiAssessmentStack/ResponsesTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ResponsesTable53B822ED"
+    }
+  ],
+  "/DFx5AiAssessmentStack/SessionsTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "SessionsTable7C302024"
+    }
+  ],
+  "/DFx5AiAssessmentStack/UserPool/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UserPool6BA7E5F2"
+    }
+  ],
+  "/DFx5AiAssessmentStack/LambdaExecutionRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdaExecutionRoleD5C26073"
+    }
+  ],
+  "/DFx5AiAssessmentStack/ChatFunction/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ChatFunction3D7C447E"
+    }
+  ],
+  "/DFx5AiAssessmentStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentFunction/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentFunctionEC182710"
+    }
+  ],
+  "/DFx5AiAssessmentStack/ReportFunction/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ReportFunction3CBC8DF1"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApi2AC82298"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Endpoint": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiEndpoint2E7A7ECD"
+    }
+  ],
+  "/DFx5AiAssessmentStack/ApiAuthorizer/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiAuthorizer68095F41"
+    }
+  ],
+  "/DFx5AiAssessmentStack/CDKMetadata/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadata"
+    }
+  ],
+  "/DFx5AiAssessmentStack/UserPool/WebClient/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "UserPoolWebClient4C9370B0"
+    }
+  ],
+  "/DFx5AiAssessmentStack/LambdaExecutionRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdaExecutionRoleDefaultPolicy6D69732F"
+    }
+  ],
+  "/DFx5AiAssessmentStack/ChatFunction/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ChatFunctionLogRetention46FB0B6E"
+    }
+  ],
+  "/DFx5AiAssessmentStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentFunction/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentFunctionLogRetentionCF30C69F"
+    }
+  ],
+  "/DFx5AiAssessmentStack/ReportFunction/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ReportFunctionLogRetentionD61715D5"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Deployment/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiDeploymentB79A705A137b6642f8cdfc8b7c3740f0dbb4588f"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/DeploymentStage.prod/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiDeploymentStageprodC2FD79C0"
+    }
+  ],
+  "/DFx5AiAssessmentStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiOPTIONS41B43D9A"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/chat/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApichat2260A749"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessment7E30C0F9"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/report/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApireport34A37490"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/health/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApihealthBEF81E43"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/chat/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApichatOPTIONS5C7C6331"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/chat/POST/ApiPermission.DFx5AiAssessmentStackAssessmentApi48743221.POST..chat": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApichatPOSTApiPermissionDFx5AiAssessmentStackAssessmentApi48743221POSTchatF8B64A0C"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/chat/POST/ApiPermission.Test.DFx5AiAssessmentStackAssessmentApi48743221.POST..chat": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApichatPOSTApiPermissionTestDFx5AiAssessmentStackAssessmentApi48743221POSTchatC4ECD223"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/chat/POST/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApichatPOST36F728CF"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentOPTIONSB220DA95"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/GET/ApiPermission.DFx5AiAssessmentStackAssessmentApi48743221.GET..assessment": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentGETApiPermissionDFx5AiAssessmentStackAssessmentApi48743221GETassessmentE1C611D8"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/GET/ApiPermission.Test.DFx5AiAssessmentStackAssessmentApi48743221.GET..assessment": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentGETApiPermissionTestDFx5AiAssessmentStackAssessmentApi48743221GETassessment9404533E"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/GET/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentGETC6F45189"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/POST/ApiPermission.DFx5AiAssessmentStackAssessmentApi48743221.POST..assessment": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentPOSTApiPermissionDFx5AiAssessmentStackAssessmentApi48743221POSTassessmentF7A4430A"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/POST/ApiPermission.Test.DFx5AiAssessmentStackAssessmentApi48743221.POST..assessment": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentPOSTApiPermissionTestDFx5AiAssessmentStackAssessmentApi48743221POSTassessmentCC0FB049"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/POST/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentPOST7E7FB558"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/{id}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentid1DCE5F08"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/report/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApireportOPTIONSB43CD9EC"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/report/{id}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApireportidABA03335"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/health/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApihealthOPTIONS46253282"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/health/GET/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApihealthGET8A1ED325"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/{id}/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentidOPTIONSC238AE61"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/{id}/GET/ApiPermission.DFx5AiAssessmentStackAssessmentApi48743221.GET..assessment.{id}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentidGETApiPermissionDFx5AiAssessmentStackAssessmentApi48743221GETassessmentid14A5BA39"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/{id}/GET/ApiPermission.Test.DFx5AiAssessmentStackAssessmentApi48743221.GET..assessment.{id}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentidGETApiPermissionTestDFx5AiAssessmentStackAssessmentApi48743221GETassessmentidD1881FEB"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/assessment/{id}/GET/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApiassessmentidGET6D6F4210"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/report/{id}/OPTIONS/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApireportidOPTIONS3698F040"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/report/{id}/GET/ApiPermission.DFx5AiAssessmentStackAssessmentApi48743221.GET..report.{id}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApireportidGETApiPermissionDFx5AiAssessmentStackAssessmentApi48743221GETreportid4F74D7D6"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/report/{id}/GET/ApiPermission.Test.DFx5AiAssessmentStackAssessmentApi48743221.GET..report.{id}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApireportidGETApiPermissionTestDFx5AiAssessmentStackAssessmentApi48743221GETreportidFF815FA2"
+    }
+  ],
+  "/DFx5AiAssessmentStack/AssessmentApi/Default/report/{id}/GET/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssessmentApireportidGETB0D3274C"
+    }
+  ]
+}

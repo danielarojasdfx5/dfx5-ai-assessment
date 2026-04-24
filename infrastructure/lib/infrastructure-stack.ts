@@ -22,7 +22,7 @@ export class DFx5InfrastructureStack extends cdk.Stack {
       partitionKey: { name: 'assessmentId', type: dynamodb.AttributeType.STRING },
       sortKey: { name: 'timestamp', type: dynamodb.AttributeType.NUMBER },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
       pointInTimeRecovery: true,
       stream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
     });
@@ -40,7 +40,7 @@ export class DFx5InfrastructureStack extends cdk.Stack {
       partitionKey: { name: 'assessmentId', type: dynamodb.AttributeType.STRING },
       sortKey: { name: 'questionId', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
       pointInTimeRecovery: true,
     });
 
@@ -49,7 +49,7 @@ export class DFx5InfrastructureStack extends cdk.Stack {
       tableName: 'dfx5-sessions',
       partitionKey: { name: 'sessionId', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
       timeToLiveAttribute: 'ttl', // Auto-expire old sessions
     });
 
@@ -88,7 +88,7 @@ export class DFx5InfrastructureStack extends cdk.Stack {
         requireSymbols: false,
       },
       accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     const userPoolClient = userPool.addClient('WebClient', {
@@ -200,7 +200,6 @@ export class DFx5InfrastructureStack extends cdk.Stack {
         stageName: 'prod',
         throttlingBurstLimit: 100,
         throttlingRateLimit: 50,
-        loggingLevel: apigateway.MethodLoggingLevel.INFO,
       },
     });
 
@@ -211,12 +210,9 @@ export class DFx5InfrastructureStack extends cdk.Stack {
 
     // API Routes
 
-    // /chat - POST (protected)
+    // /chat - POST (public for testing - add auth later)
     const chat = api.root.addResource('chat');
-    chat.addMethod('POST', new apigateway.LambdaIntegration(chatFunction), {
-      authorizer,
-      authorizationType: apigateway.AuthorizationType.COGNITO,
-    });
+    chat.addMethod('POST', new apigateway.LambdaIntegration(chatFunction));
 
     // /assessment - GET, POST (protected)
     const assessment = api.root.addResource('assessment');

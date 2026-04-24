@@ -1,0 +1,1803 @@
+{
+ "Description": "DFx5 AI Readiness Assessment Platform Infrastructure",
+ "Resources": {
+  "AssessmentsTable6996196E": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "assessmentId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "timestamp",
+      "AttributeType": "N"
+     },
+     {
+      "AttributeName": "userId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "userId-index",
+      "KeySchema": [
+       {
+        "AttributeName": "userId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "timestamp",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "assessmentId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "timestamp",
+      "KeyType": "RANGE"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TableName": "dfx5-assessments"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentsTable/Resource"
+   }
+  },
+  "ResponsesTable53B822ED": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "assessmentId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "questionId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "assessmentId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "questionId",
+      "KeyType": "RANGE"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "TableName": "dfx5-responses"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/ResponsesTable/Resource"
+   }
+  },
+  "SessionsTable7C302024": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "sessionId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "sessionId",
+      "KeyType": "HASH"
+     }
+    ],
+    "TableName": "dfx5-sessions",
+    "TimeToLiveSpecification": {
+     "AttributeName": "ttl",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/SessionsTable/Resource"
+   }
+  },
+  "UserPool6BA7E5F2": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_email",
+       "Priority": 1
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": false
+    },
+    "AutoVerifiedAttributes": [
+     "email"
+    ],
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "Policies": {
+     "PasswordPolicy": {
+      "MinimumLength": 8,
+      "RequireLowercase": true,
+      "RequireNumbers": true,
+      "RequireSymbols": false,
+      "RequireUppercase": true
+     }
+    },
+    "Schema": [
+     {
+      "Mutable": true,
+      "Name": "email",
+      "Required": true
+     },
+     {
+      "Mutable": true,
+      "Name": "name",
+      "Required": false
+     },
+     {
+      "AttributeDataType": "String",
+      "Mutable": true,
+      "Name": "company",
+      "StringAttributeConstraints": {
+       "MaxLength": "256",
+       "MinLength": "1"
+      }
+     },
+     {
+      "AttributeDataType": "String",
+      "Mutable": true,
+      "Name": "industry",
+      "StringAttributeConstraints": {
+       "MaxLength": "100",
+       "MinLength": "1"
+      }
+     }
+    ],
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "UserPoolName": "dfx5-ai-assessment-users",
+    "UsernameAttributes": [
+     "email"
+    ],
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/UserPool/Resource"
+   }
+  },
+  "UserPoolWebClient4C9370B0": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "AccessTokenValidity": 60,
+    "AllowedOAuthFlows": [
+     "implicit",
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "profile",
+     "phone",
+     "email",
+     "openid",
+     "aws.cognito.signin.user.admin"
+    ],
+    "CallbackURLs": [
+     "https://example.com"
+    ],
+    "ClientName": "dfx5-web-client",
+    "ExplicitAuthFlows": [
+     "ALLOW_USER_PASSWORD_AUTH",
+     "ALLOW_USER_SRP_AUTH",
+     "ALLOW_REFRESH_TOKEN_AUTH"
+    ],
+    "GenerateSecret": false,
+    "IdTokenValidity": 60,
+    "RefreshTokenValidity": 43200,
+    "SupportedIdentityProviders": [
+     "COGNITO"
+    ],
+    "TokenValidityUnits": {
+     "AccessToken": "minutes",
+     "IdToken": "minutes",
+     "RefreshToken": "minutes"
+    },
+    "UserPoolId": {
+     "Ref": "UserPool6BA7E5F2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/UserPool/WebClient/Resource"
+   }
+  },
+  "LambdaExecutionRoleD5C26073": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Description": "Execution role for DFx5 AI Assessment Lambda functions",
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/LambdaExecutionRole/Resource"
+   }
+  },
+  "LambdaExecutionRoleDefaultPolicy6D69732F": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "bedrock:InvokeModel",
+        "bedrock:InvokeModelWithResponseStream"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-*",
+        "arn:aws:bedrock:us-east-1::foundation-model/meta.llama3-*"
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AssessmentsTable6996196E",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "ResponsesTable53B822ED",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "SessionsTable7C302024",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AssessmentsTable6996196E",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LambdaExecutionRoleDefaultPolicy6D69732F",
+    "Roles": [
+     {
+      "Ref": "LambdaExecutionRoleD5C26073"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/LambdaExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "ChatFunction3D7C447E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-755633626396-us-east-1",
+     "S3Key": "1cdf5390fa59871b85a918774fed559405880d20799933cdcdde4ab7eb67386f.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "ASSESSMENTS_TABLE": {
+       "Ref": "AssessmentsTable6996196E"
+      },
+      "RESPONSES_TABLE": {
+       "Ref": "ResponsesTable53B822ED"
+      },
+      "SESSIONS_TABLE": {
+       "Ref": "SessionsTable7C302024"
+      },
+      "MODEL_ID": "meta.llama3-8b-instruct-v1:0",
+      "REGION": "us-east-1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdaExecutionRoleD5C26073",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdaExecutionRoleDefaultPolicy6D69732F",
+    "LambdaExecutionRoleD5C26073"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/ChatFunction/Resource",
+    "aws:asset:path": "asset.1cdf5390fa59871b85a918774fed559405880d20799933cdcdde4ab7eb67386f",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ChatFunctionLogRetention46FB0B6E": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "ChatFunction3D7C447E"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 7
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/ChatFunction/LogRetention/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:DeleteRetentionPolicy",
+        "logs:PutRetentionPolicy"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "Roles": [
+     {
+      "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Handler": "index.handler",
+    "Runtime": "nodejs22.x",
+    "Timeout": 900,
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-755633626396-us-east-1",
+     "S3Key": "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource",
+    "aws:asset:path": "asset.2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "AssessmentFunctionEC182710": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-755633626396-us-east-1",
+     "S3Key": "0b5419d54803a86a48b9054f235baac051d770786435960f8ae30b549c9eb948.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "ASSESSMENTS_TABLE": {
+       "Ref": "AssessmentsTable6996196E"
+      },
+      "RESPONSES_TABLE": {
+       "Ref": "ResponsesTable53B822ED"
+      },
+      "SESSIONS_TABLE": {
+       "Ref": "SessionsTable7C302024"
+      },
+      "MODEL_ID": "meta.llama3-8b-instruct-v1:0",
+      "REGION": "us-east-1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdaExecutionRoleD5C26073",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 15
+   },
+   "DependsOn": [
+    "LambdaExecutionRoleDefaultPolicy6D69732F",
+    "LambdaExecutionRoleD5C26073"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentFunction/Resource",
+    "aws:asset:path": "asset.0b5419d54803a86a48b9054f235baac051d770786435960f8ae30b549c9eb948",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "AssessmentFunctionLogRetentionCF30C69F": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "AssessmentFunctionEC182710"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 7
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentFunction/LogRetention/Resource"
+   }
+  },
+  "ReportFunction3CBC8DF1": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-755633626396-us-east-1",
+     "S3Key": "32a8484ea87fe3d8b1a9f3d9a5e067a824259393883a240405cf8eed92a14b4e.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "ASSESSMENTS_TABLE": {
+       "Ref": "AssessmentsTable6996196E"
+      },
+      "RESPONSES_TABLE": {
+       "Ref": "ResponsesTable53B822ED"
+      },
+      "SESSIONS_TABLE": {
+       "Ref": "SessionsTable7C302024"
+      },
+      "MODEL_ID": "meta.llama3-8b-instruct-v1:0",
+      "REGION": "us-east-1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdaExecutionRoleD5C26073",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LambdaExecutionRoleDefaultPolicy6D69732F",
+    "LambdaExecutionRoleD5C26073"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/ReportFunction/Resource",
+    "aws:asset:path": "asset.32a8484ea87fe3d8b1a9f3d9a5e067a824259393883a240405cf8eed92a14b4e",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ReportFunctionLogRetentionD61715D5": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "ReportFunction3CBC8DF1"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 7
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/ReportFunction/LogRetention/Resource"
+   }
+  },
+  "AssessmentApi2AC82298": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "API for DFx5 AI Readiness Assessment Platform",
+    "Name": "dfx5-ai-assessment-api"
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Resource"
+   }
+  },
+  "AssessmentApiDeploymentB79A705A137b6642f8cdfc8b7c3740f0dbb4588f": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "API for DFx5 AI Readiness Assessment Platform",
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "DependsOn": [
+    "ApiAuthorizer68095F41",
+    "AssessmentApiassessmentidGET6D6F4210",
+    "AssessmentApiassessmentidOPTIONSC238AE61",
+    "AssessmentApiassessmentid1DCE5F08",
+    "AssessmentApiassessmentGETC6F45189",
+    "AssessmentApiassessmentOPTIONSB220DA95",
+    "AssessmentApiassessmentPOST7E7FB558",
+    "AssessmentApiassessment7E30C0F9",
+    "AssessmentApichatOPTIONS5C7C6331",
+    "AssessmentApichatPOST36F728CF",
+    "AssessmentApichat2260A749",
+    "AssessmentApihealthGET8A1ED325",
+    "AssessmentApihealthOPTIONS46253282",
+    "AssessmentApihealthBEF81E43",
+    "AssessmentApiOPTIONS41B43D9A",
+    "AssessmentApireportidGETB0D3274C",
+    "AssessmentApireportidOPTIONS3698F040",
+    "AssessmentApireportidABA03335",
+    "AssessmentApireportOPTIONSB43CD9EC",
+    "AssessmentApireport34A37490"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Deployment/Resource",
+    "aws:cdk:do-not-refactor": true
+   }
+  },
+  "AssessmentApiDeploymentStageprodC2FD79C0": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "AssessmentApiDeploymentB79A705A137b6642f8cdfc8b7c3740f0dbb4588f"
+    },
+    "MethodSettings": [
+     {
+      "DataTraceEnabled": false,
+      "HttpMethod": "*",
+      "ResourcePath": "/*",
+      "ThrottlingBurstLimit": 100,
+      "ThrottlingRateLimit": 50
+     }
+    ],
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "AssessmentApiOPTIONS41B43D9A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "AssessmentApi2AC82298",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/OPTIONS/Resource"
+   }
+  },
+  "AssessmentApichat2260A749": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "AssessmentApi2AC82298",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "chat",
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/chat/Resource"
+   }
+  },
+  "AssessmentApichatOPTIONS5C7C6331": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AssessmentApichat2260A749"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/chat/OPTIONS/Resource"
+   }
+  },
+  "AssessmentApichatPOSTApiPermissionDFx5AiAssessmentStackAssessmentApi48743221POSTchatF8B64A0C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ChatFunction3D7C447E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:755633626396:",
+       {
+        "Ref": "AssessmentApi2AC82298"
+       },
+       "/",
+       {
+        "Ref": "AssessmentApiDeploymentStageprodC2FD79C0"
+       },
+       "/POST/chat"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/chat/POST/ApiPermission.DFx5AiAssessmentStackAssessmentApi48743221.POST..chat"
+   }
+  },
+  "AssessmentApichatPOSTApiPermissionTestDFx5AiAssessmentStackAssessmentApi48743221POSTchatC4ECD223": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ChatFunction3D7C447E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:755633626396:",
+       {
+        "Ref": "AssessmentApi2AC82298"
+       },
+       "/test-invoke-stage/POST/chat"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/chat/POST/ApiPermission.Test.DFx5AiAssessmentStackAssessmentApi48743221.POST..chat"
+   }
+  },
+  "AssessmentApichatPOST36F728CF": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ChatFunction3D7C447E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "AssessmentApichat2260A749"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/chat/POST/Resource"
+   }
+  },
+  "AssessmentApiassessment7E30C0F9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "AssessmentApi2AC82298",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "assessment",
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/Resource"
+   }
+  },
+  "AssessmentApiassessmentOPTIONSB220DA95": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AssessmentApiassessment7E30C0F9"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/OPTIONS/Resource"
+   }
+  },
+  "AssessmentApiassessmentGETApiPermissionDFx5AiAssessmentStackAssessmentApi48743221GETassessmentE1C611D8": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "AssessmentFunctionEC182710",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:755633626396:",
+       {
+        "Ref": "AssessmentApi2AC82298"
+       },
+       "/",
+       {
+        "Ref": "AssessmentApiDeploymentStageprodC2FD79C0"
+       },
+       "/GET/assessment"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/GET/ApiPermission.DFx5AiAssessmentStackAssessmentApi48743221.GET..assessment"
+   }
+  },
+  "AssessmentApiassessmentGETApiPermissionTestDFx5AiAssessmentStackAssessmentApi48743221GETassessment9404533E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "AssessmentFunctionEC182710",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:755633626396:",
+       {
+        "Ref": "AssessmentApi2AC82298"
+       },
+       "/test-invoke-stage/GET/assessment"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/GET/ApiPermission.Test.DFx5AiAssessmentStackAssessmentApi48743221.GET..assessment"
+   }
+  },
+  "AssessmentApiassessmentGETC6F45189": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiAuthorizer68095F41"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "AssessmentFunctionEC182710",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "AssessmentApiassessment7E30C0F9"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/GET/Resource"
+   }
+  },
+  "AssessmentApiassessmentPOSTApiPermissionDFx5AiAssessmentStackAssessmentApi48743221POSTassessmentF7A4430A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "AssessmentFunctionEC182710",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:755633626396:",
+       {
+        "Ref": "AssessmentApi2AC82298"
+       },
+       "/",
+       {
+        "Ref": "AssessmentApiDeploymentStageprodC2FD79C0"
+       },
+       "/POST/assessment"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/POST/ApiPermission.DFx5AiAssessmentStackAssessmentApi48743221.POST..assessment"
+   }
+  },
+  "AssessmentApiassessmentPOSTApiPermissionTestDFx5AiAssessmentStackAssessmentApi48743221POSTassessmentCC0FB049": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "AssessmentFunctionEC182710",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:755633626396:",
+       {
+        "Ref": "AssessmentApi2AC82298"
+       },
+       "/test-invoke-stage/POST/assessment"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/POST/ApiPermission.Test.DFx5AiAssessmentStackAssessmentApi48743221.POST..assessment"
+   }
+  },
+  "AssessmentApiassessmentPOST7E7FB558": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiAuthorizer68095F41"
+    },
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "AssessmentFunctionEC182710",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "AssessmentApiassessment7E30C0F9"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/POST/Resource"
+   }
+  },
+  "AssessmentApiassessmentid1DCE5F08": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "AssessmentApiassessment7E30C0F9"
+    },
+    "PathPart": "{id}",
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/{id}/Resource"
+   }
+  },
+  "AssessmentApiassessmentidOPTIONSC238AE61": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AssessmentApiassessmentid1DCE5F08"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/{id}/OPTIONS/Resource"
+   }
+  },
+  "AssessmentApiassessmentidGETApiPermissionDFx5AiAssessmentStackAssessmentApi48743221GETassessmentid14A5BA39": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "AssessmentFunctionEC182710",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:755633626396:",
+       {
+        "Ref": "AssessmentApi2AC82298"
+       },
+       "/",
+       {
+        "Ref": "AssessmentApiDeploymentStageprodC2FD79C0"
+       },
+       "/GET/assessment/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/{id}/GET/ApiPermission.DFx5AiAssessmentStackAssessmentApi48743221.GET..assessment.{id}"
+   }
+  },
+  "AssessmentApiassessmentidGETApiPermissionTestDFx5AiAssessmentStackAssessmentApi48743221GETassessmentidD1881FEB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "AssessmentFunctionEC182710",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:755633626396:",
+       {
+        "Ref": "AssessmentApi2AC82298"
+       },
+       "/test-invoke-stage/GET/assessment/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/{id}/GET/ApiPermission.Test.DFx5AiAssessmentStackAssessmentApi48743221.GET..assessment.{id}"
+   }
+  },
+  "AssessmentApiassessmentidGET6D6F4210": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiAuthorizer68095F41"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "AssessmentFunctionEC182710",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "AssessmentApiassessmentid1DCE5F08"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/assessment/{id}/GET/Resource"
+   }
+  },
+  "AssessmentApireport34A37490": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "AssessmentApi2AC82298",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "report",
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/report/Resource"
+   }
+  },
+  "AssessmentApireportOPTIONSB43CD9EC": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AssessmentApireport34A37490"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/report/OPTIONS/Resource"
+   }
+  },
+  "AssessmentApireportidABA03335": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "AssessmentApireport34A37490"
+    },
+    "PathPart": "{id}",
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/report/{id}/Resource"
+   }
+  },
+  "AssessmentApireportidOPTIONS3698F040": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AssessmentApireportidABA03335"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/report/{id}/OPTIONS/Resource"
+   }
+  },
+  "AssessmentApireportidGETApiPermissionDFx5AiAssessmentStackAssessmentApi48743221GETreportid4F74D7D6": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ReportFunction3CBC8DF1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:755633626396:",
+       {
+        "Ref": "AssessmentApi2AC82298"
+       },
+       "/",
+       {
+        "Ref": "AssessmentApiDeploymentStageprodC2FD79C0"
+       },
+       "/GET/report/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/report/{id}/GET/ApiPermission.DFx5AiAssessmentStackAssessmentApi48743221.GET..report.{id}"
+   }
+  },
+  "AssessmentApireportidGETApiPermissionTestDFx5AiAssessmentStackAssessmentApi48743221GETreportidFF815FA2": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ReportFunction3CBC8DF1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:755633626396:",
+       {
+        "Ref": "AssessmentApi2AC82298"
+       },
+       "/test-invoke-stage/GET/report/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/report/{id}/GET/ApiPermission.Test.DFx5AiAssessmentStackAssessmentApi48743221.GET..report.{id}"
+   }
+  },
+  "AssessmentApireportidGETB0D3274C": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "ApiAuthorizer68095F41"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ReportFunction3CBC8DF1",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "AssessmentApireportidABA03335"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/report/{id}/GET/Resource"
+   }
+  },
+  "AssessmentApihealthBEF81E43": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "AssessmentApi2AC82298",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "health",
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/health/Resource"
+   }
+  },
+  "AssessmentApihealthOPTIONS46253282": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AssessmentApihealthBEF81E43"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/health/OPTIONS/Resource"
+   }
+  },
+  "AssessmentApihealthGET8A1ED325": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseTemplates": {
+        "application/json": "{\"status\": \"healthy\"}"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "AssessmentApihealthBEF81E43"
+    },
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/AssessmentApi/Default/health/GET/Resource"
+   }
+  },
+  "ApiAuthorizer68095F41": {
+   "Type": "AWS::ApiGateway::Authorizer",
+   "Properties": {
+    "IdentitySource": "method.request.header.Authorization",
+    "Name": "DFx5AiAssessmentStackApiAuthorizer9F35535F",
+    "ProviderARNs": [
+     {
+      "Fn::GetAtt": [
+       "UserPool6BA7E5F2",
+       "Arn"
+      ]
+     }
+    ],
+    "RestApiId": {
+     "Ref": "AssessmentApi2AC82298"
+    },
+    "Type": "COGNITO_USER_POOLS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/ApiAuthorizer/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WQwW7CMAyGn4V78FjZHgCYdto0VLYzSltTDGlc1c5QV/Xdp6ZlsJM/+49/O04geV7AYmYvMs+L89xRBt1ObX429iL7rmi9rbjIoPu0mUOzOfgIvcm59KQM3Zdgs2V2g/bHV9g4Qq/30ljpDdkKupRHzxi37Chvh3Sk3jhbZYWF7jX4XIn9oN3zFpuKRIh9b2S5tyKoAqshGFnCOuRn1LUVNI5LgTcuU1T0sd3WVFrFi22hS1F0VVPcZMIXrB231bT8XbZTW8adR0hRODQ5xinvqEcuBnGiqzo5Tzxe7noQWQU9ckM/2AzPblnf3/rjn4aJ5Mv/Zgf/EbQO2hvPBcJJHr6TBB6fYDE7CdG8CV6pQkjH+Av74dxs8QEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "DFx5AiAssessmentStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "AssessmentApiEndpoint2E7A7ECD": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "AssessmentApi2AC82298"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "AssessmentApiDeploymentStageprodC2FD79C0"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "ApiUrl": {
+   "Description": "API Gateway URL",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "AssessmentApi2AC82298"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "AssessmentApiDeploymentStageprodC2FD79C0"
+      },
+      "/"
+     ]
+    ]
+   },
+   "Export": {
+    "Name": "DFx5-ApiUrl"
+   }
+  },
+  "UserPoolId": {
+   "Description": "Cognito User Pool ID",
+   "Value": {
+    "Ref": "UserPool6BA7E5F2"
+   },
+   "Export": {
+    "Name": "DFx5-UserPoolId"
+   }
+  },
+  "UserPoolClientId": {
+   "Description": "Cognito User Pool Client ID",
+   "Value": {
+    "Ref": "UserPoolWebClient4C9370B0"
+   },
+   "Export": {
+    "Name": "DFx5-UserPoolClientId"
+   }
+  },
+  "AssessmentsTableName": {
+   "Description": "DynamoDB Assessments Table Name",
+   "Value": {
+    "Ref": "AssessmentsTable6996196E"
+   }
+  },
+  "Region": {
+   "Description": "AWS Region",
+   "Value": "us-east-1"
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
